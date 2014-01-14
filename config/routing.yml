@@ -1,0 +1,4 @@
+test:
+    pattern: /test
+    controller: pouet
+    action: biscuit
