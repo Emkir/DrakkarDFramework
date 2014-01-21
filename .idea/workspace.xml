@@ -2,29 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a11898f3-f7d1-458b-a353-8ff821e27038" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/index.php" />
-      <change type="DELETED" beforePath="C:\wamp\www\Supinternet annee 2\PHP\DrakkarDFramework\config\routing.yml" afterPath="" />
-      <change type="DELETED" beforePath="C:\wamp\www\Supinternet annee 2\PHP\DrakkarDFramework\core\index.php" afterPath="" />
-      <change type="DELETED" beforePath="C:\wamp\www\Supinternet annee 2\PHP\DrakkarDFramework\core\models\Routing.php" afterPath="" />
-      <change type="DELETED" beforePath="C:\wamp\www\Supinternet annee 2\PHP\DrakkarDFramework\vendors\spyc-master\COPYING" afterPath="" />
-      <change type="DELETED" beforePath="C:\wamp\www\Supinternet annee 2\PHP\DrakkarDFramework\vendors\spyc-master\README.md" afterPath="" />
-      <change type="DELETED" beforePath="C:\wamp\www\Supinternet annee 2\PHP\DrakkarDFramework\vendors\spyc-master\Spyc.php" afterPath="" />
-      <change type="DELETED" beforePath="C:\wamp\www\Supinternet annee 2\PHP\DrakkarDFramework\vendors\spyc-master\composer.json" afterPath="" />
-      <change type="DELETED" beforePath="C:\wamp\www\Supinternet annee 2\PHP\DrakkarDFramework\vendors\spyc-master\examples\yaml-dump.php" afterPath="" />
-      <change type="DELETED" beforePath="C:\wamp\www\Supinternet annee 2\PHP\DrakkarDFramework\vendors\spyc-master\examples\yaml-load.php" afterPath="" />
-      <change type="DELETED" beforePath="C:\wamp\www\Supinternet annee 2\PHP\DrakkarDFramework\vendors\spyc-master\php4\5to4.php" afterPath="" />
-      <change type="DELETED" beforePath="C:\wamp\www\Supinternet annee 2\PHP\DrakkarDFramework\vendors\spyc-master\php4\spyc.php4" afterPath="" />
-      <change type="DELETED" beforePath="C:\wamp\www\Supinternet annee 2\PHP\DrakkarDFramework\vendors\spyc-master\php4\test.php4" afterPath="" />
-      <change type="DELETED" beforePath="C:\wamp\www\Supinternet annee 2\PHP\DrakkarDFramework\vendors\spyc-master\spyc.yaml" afterPath="" />
-      <change type="DELETED" beforePath="C:\wamp\www\Supinternet annee 2\PHP\DrakkarDFramework\vendors\spyc-master\tests\DumpTest.php" afterPath="" />
-      <change type="DELETED" beforePath="C:\wamp\www\Supinternet annee 2\PHP\DrakkarDFramework\vendors\spyc-master\tests\IndentTest.php" afterPath="" />
-      <change type="DELETED" beforePath="C:\wamp\www\Supinternet annee 2\PHP\DrakkarDFramework\vendors\spyc-master\tests\ParseTest.php" afterPath="" />
-      <change type="DELETED" beforePath="C:\wamp\www\Supinternet annee 2\PHP\DrakkarDFramework\vendors\spyc-master\tests\RoundTripTest.php" afterPath="" />
-      <change type="DELETED" beforePath="C:\wamp\www\Supinternet annee 2\PHP\DrakkarDFramework\vendors\spyc-master\tests\comments.yaml" afterPath="" />
-      <change type="DELETED" beforePath="C:\wamp\www\Supinternet annee 2\PHP\DrakkarDFramework\vendors\spyc-master\tests\failing1.yaml" afterPath="" />
-      <change type="DELETED" beforePath="C:\wamp\www\Supinternet annee 2\PHP\DrakkarDFramework\vendors\spyc-master\tests\indent_1.yaml" afterPath="" />
-      <change type="DELETED" beforePath="C:\wamp\www\Supinternet annee 2\PHP\DrakkarDFramework\vendors\spyc-master\tests\quotes.yaml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/.htaccess" afterPath="$PROJECT_DIR$/web/.htaccess" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="DrakkarFramework.iws" />
