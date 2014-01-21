@@ -1,6 +1,7 @@
 <?php
 
-namespace Routing;
+namespace DrakkarD\Routing;
+use DrakkarD\Spyc\Spyc;
 
 class Routing {
 
@@ -11,7 +12,7 @@ class Routing {
        if (!file_exists($routing)){
            throw new \Exception("Unknown routing file");
        }
-       $this->routes = \Spyc::YAMLLoad($routing);
+       $this->routes = Spyc::YAMLLoad($routing);
        var_dump($this->routes);
    }
 

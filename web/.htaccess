@@ -1,3 +1,6 @@
-RewriteEngine On
-RewriteRule ^(.*)$ app.php [QSA,L]
+Options All -Indexes
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI} !index.php
+RewriteRule (.*) index.php/$1 [QSA,L]
 

@@ -10,6 +10,8 @@
    * @package Spyc
    */
 
+namespace DrakkarD\Spyc;
+
 if (!function_exists('spyc_load')) {
   /**
    * Parses YAML to array.
