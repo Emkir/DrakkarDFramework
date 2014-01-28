@@ -1,4 +1,3 @@
-test:
-    pattern: /test
-    controller: pouet
-    action: biscuit
+drakkard:
+    pattern: /
+    ressource: /project/config/routing.yml

@@ -1,0 +1,4 @@
+drakkard:
+    pattern: /
+    controller: pouet
+    action: biscuit

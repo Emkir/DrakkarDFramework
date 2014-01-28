@@ -8,7 +8,7 @@ class Routing {
    private $routes;
 
    public function __construct(){
-       $routing = './../config/routing.yml';
+       $routing = '../core/config/routing.yml';
        if (!file_exists($routing)){
            throw new \Exception("Unknown routing file");
        }
@@ -17,6 +17,24 @@ class Routing {
    }
 
    public function getController(){
+       if(empty($_SERVER['PATH_INFO']) || $_SERVER['PATH_INFO'] == '/'){
+           $params = array();
+       }
+       else {
+           $params = self::cleanEmptyInArray(explode('/', $_SERVER['PATH_INFO']));
+       }
 
+       
+
+       var_dump($params);
+   }
+
+   private function cleanEmptyInArray($array){
+       foreach ($array as $key=>$value){
+           if (empty($value)){
+               unset($array[$key]);
+           }
+       }
+       return $array;
    }
 } 
