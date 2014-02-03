@@ -5,36 +5,47 @@ use DrakkarD\Spyc\Spyc;
 
 class Routing {
 
-   private $routes;
+    private $config_routes;
+    private $path;
+    private $params;
 
-   public function __construct(){
-       $routing = '../core/config/routing.yml';
-       if (!file_exists($routing)){
-           throw new \Exception("Unknown routing file");
-       }
-       $this->routes = Spyc::YAMLLoad($routing);
-       var_dump($this->routes);
-   }
+    public function __construct(){
+        $routing = '../core/config/routing.yml';
+        if (!file_exists($routing)){
+            throw new \Exception("Unknown routing file");
+        }
+        $this->config_routes = Spyc::YAMLLoad($routing);
+        if(empty($_SERVER['PATH_INFO']) || $_SERVER['PATH_INFO'] == "/"){
+            $this->path = "/";
+            $this->params = array();
+        }
+        else{
+            $this->path = $_SERVER['PATH_INFO'];
+            $this->params = self::cleanEmptyInArray(explode('/', $_SERVER['PATH_INFO']));
+        }
+        var_dump($this->config_routes);
+    }
 
-   public function getController(){
-       if(empty($_SERVER['PATH_INFO']) || $_SERVER['PATH_INFO'] == '/'){
-           $params = array();
-       }
-       else {
-           $params = self::cleanEmptyInArray(explode('/', $_SERVER['PATH_INFO']));
-       }
+    public function getRessource(){
+           foreach ($this->config_routes as $route){
+               if ($route['pattern'] == $this->path){
+                   $project_route=$route['ressource'];
+                   if (!file_exists('..'.$project_route)){
+                       throw new \Exception("Unknown routing file");
+                   }
+                   break;
+               }
 
-       
-
-       var_dump($params);
-   }
-
-   private function cleanEmptyInArray($array){
-       foreach ($array as $key=>$value){
-           if (empty($value)){
-               unset($array[$key]);
            }
-       }
-       return $array;
-   }
+
+    }
+
+    private function cleanEmptyInArray($array){
+        foreach ($array as $key=>$value){
+            if (empty($value)){
+                unset($array[$key]);
+            }
+        }
+        return $array;
+    }
 } 
