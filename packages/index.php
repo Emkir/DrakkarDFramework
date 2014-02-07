@@ -5,12 +5,12 @@
 	{
 		private static $_coreClass = array (
 			"Test" => "./test.php",
-			"Test1" => "./test2.php"
+			"Test2" => "./test2.php"
 		);
 
 		public static function autoload ($className)
 		{
-			echo "$className";
+			echo "$className<br />";
 			
 			$realClassName = explode('\\', $className);
 			
@@ -21,9 +21,18 @@
 			}
 		}
 	}
+	
 	define("KIKOU", "rominouninou");
 	spl_autoload_register(array('DrF', 'autoload'));
+	
+	$test = new Test\Test();
+	$package = Package\Package::getInstance();
 
-	include('test.php');
+	$package->action($test, "connect");
+	echo "<br /><br />";
+	$package->action($test, "connect2");
+	echo "<br /><br />";
+	
+	$package->action($test, "connect3");
 
 ?>

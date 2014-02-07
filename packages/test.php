@@ -80,13 +80,6 @@
 
 	var_dump($change);*/
 	$lol = "kikou les amis";
-	$test = new Test();
-	$package = Package\Package::getInstance();
-
-	$package->action($test, "connect");
-	echo "<br /><br />";
-	$package->action($test, "connect2");
-	echo "<br /><br />";
 	
-	$package->action($test, "connect3");
+	
 ?>
