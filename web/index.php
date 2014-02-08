@@ -1,7 +1,10 @@
 <?php
 use DrakkarD\Routing;
-require_once("./../core/routing/Routing.php");
-require_once("./../core/spyc-master/Spyc.php");
+require_once("./../core/autoload/Autoload.php");
 
-$routing = new Routing\Routing();
-$routing->getRessource();
+spl_autoload_register('DrakkarD\Autoload\Autoload::autoload');
+
+new Toto;
+
+/*$routing = new Routing\Routing();
+$routing->getRessource();*/
