@@ -1,5 +1,6 @@
 <?php
-	namespace Package;
+	
+	Namespace Drakkard\Package;
 
 	class Package
 	{
@@ -47,6 +48,9 @@
 						//get the function name
 						$function_name = $function;
 
+						//update _globals which contain an array of $GLOBALS
+						$this->updateGlobals();
+
 						if (strpos($function, "(") !== FALSE)
 						{
 							$function_name = substr($function, 0, strpos($function, "(")); 
@@ -55,8 +59,6 @@
 							$function_args = $this->prepareArgs($function);
 						}
 
-						//update _globals which contain an array of $GLOBALS
-						$this->updateGlobals();
 
 						//execute the function if it is callable
 						$this->execute_func($instance, $function_name, $function_args);
@@ -93,24 +95,22 @@
 
 				else if (strpos($value, '%') === 0)
 				{
-					$value = str_replace('%', '', $value);
+					$value = substr($value, 1);
 
-					if (array_key_exists($value, $_globals))
-						$value = $_globals[$value];
+					if (array_key_exists($value, self::$_globals))
+						$value = self::$_globals[$value];
 
 					elseif (strpos($value, '.') !== FALSE)
 					{
 						$table = explode('.', $value);
-						$arg_instance = $_globals[$table[0]];
+						$arg_instance = self::$_globals[$table[0]];
 						//ca marche on peut donc bien récupérer l'instance
 						//et y executer les fonctions accessibles
 						//$this->execute_func($arg_instance, 'connect');
-						var_dump($arg_instance);
-						/*$array =  (array) $arg_instance;
-						var_dump($array);*/
+						$arg_instance_array = (array) $arg_instance;
 
-						if (array_key_exists($table[1], $arg_instance))
-							$value = $arg_instance[$table[1]];
+						if (array_key_exists($table[1], $arg_instance_array))
+							$value = $arg_instance_array[$table[1]];
 						else
 						{
 							$arg_function_name = "get".ucfirst($table[1]);
@@ -121,15 +121,49 @@
 							}
 
 							else
-								throw new Exception("Argument pass is protected or private, and the instance have no method getArgument_name with the name of you're argument instead of Argument_name, the function have to be in camelcase");
+								throw new \Exception("Argument pass is protected or private, and the instance have no method getArgument_name with the name of you're argument instead of Argument_name, the function have to be in camelcase");
 								
 						}
 					}
+
+					elseif (strpos($value, '::%'))
+					{
+						//get in table an array as : array (Namespace\ClassName, StaticAttributeName);
+						$table = explode('::%', $value);
+						
+						if (property_exists($table[0], $table[1]))
+						{
+							$searchStaticAttribute = new \ReflectionClass($table[0]);
+							$listAttribute = $searchStaticAttribute->getStaticProperties();
+							
+							if (array_key_exists($table[1], $listAttribute))
+								$value = $listAttribute[$table[1]];
+							else
+								throw new \Exception("static attribute ".$table[1]." doesn't exist in class ".$table[0]);														
+						}
+
+						else
+							throw new \Exception("static attribute ".$table[1]." doesn't exist in class ".$table[0]);
+					}
+
+					elseif (strpos($value, '::!'))
+					{
+						$table = explode('::!', $value);
+
+						$searchStaticAttribute = new \ReflectionClass($table[0]);
+						$listConstant = $searchStaticAttribute->getConstants();
+
+						if (array_key_exists($table[1], $listConstant))
+							$value = $listConstant[$table[1]];
+						else
+							throw new \Exception("Error : no class constant name '".$table[1]."' in class '".$table[0]."'");							
+					}
 				}
 
-				elseif (strpos($value, '!') !== FALSE)
+				elseif (strpos($value, '!') === 0)
 				{
-					$value = str_replace('!', '', $value);
+					$value = substr($value, 1);
+
 					if (defined($value))
 					{
 						$value = constant($value);
@@ -173,8 +207,8 @@
 
 		protected function updateGlobals ()
 		{
-			$_globals = $GLOBALS;
-			unset($_globals);
+			self::$_globals = $GLOBALS;
+			unset(self::$_globals['_SERVER']);
 		}
 
 	}

@@ -9,9 +9,7 @@
 		);
 
 		public static function autoload ($className)
-		{
-			echo "$className<br />";
-			
+		{			
 			$realClassName = explode('\\', $className);
 			
 			if (array_key_exists(end($realClassName), self::$_coreClass))
@@ -21,18 +19,20 @@
 			}
 		}
 	}
-	
+
 	define("KIKOU", "rominouninou");
+	$lol = "kikou les amis";
 	spl_autoload_register(array('DrF', 'autoload'));
 	
 	$test = new Test\Test();
-	$package = Package\Package::getInstance();
+	$package = Drakkard\Package\Package::getInstance();
 
 	$package->action($test, "connect");
 	echo "<br /><br />";
 	$package->action($test, "connect2");
 	echo "<br /><br />";
-	
 	$package->action($test, "connect3");
+	echo "<br /><br />";
+	$package->action($test, "connect4");
 
 ?>
