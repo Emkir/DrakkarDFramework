@@ -4,6 +4,7 @@
 
 	class Test extends Test2
 	{
+		const BABA = 'BABAORUM POWA';
 		private $nom = "grelet";
 		public $prenom = "romain";
 		public $ville = "Bondy";
@@ -13,7 +14,8 @@
 		protected static $package = array (
 			"connect" => array ("test1", "test2", "test1(%lol)"),
 			"connect2" => array ("test1(%test.prenom)", "connect", "test1(%test.age)"),
-			"connect3" => array ("test1(%Test\Test::%_coco)", "test1(cocorico)", "test1(!KIKOU)")
+			"connect3" => array ("test1(%Test\Test::%_coco)", "test1(cocorico)", "test1(!KIKOU)"),
+			"connect4" => array("test1(%Test\Test::!BABA)")
 			);
 		//doit se trouver dans la classe mère (base)
 		public function getPackage ()

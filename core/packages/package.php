@@ -133,7 +133,7 @@
 						
 						if (property_exists($table[0], $table[1]))
 						{
-							$searchStaticAttribute = new \ReflectionClass('Test\Test');
+							$searchStaticAttribute = new \ReflectionClass($table[0]);
 							$listAttribute = $searchStaticAttribute->getStaticProperties();
 							
 							if (array_key_exists($table[1], $listAttribute))
@@ -144,6 +144,19 @@
 
 						else
 							throw new \Exception("static attribute ".$table[1]." doesn't exist in class ".$table[0]);
+					}
+
+					elseif (strpos($value, '::!'))
+					{
+						$table = explode('::!', $value);
+
+						$searchStaticAttribute = new \ReflectionClass($table[0]);
+						$listConstant = $searchStaticAttribute->getConstants();
+
+						if (array_key_exists($table[1], $listConstant))
+							$value = $listConstant[$table[1]];
+						else
+							throw new \Exception("Error : no class constant name '".$table[1]."' in class '".$table[0]."'");							
 					}
 				}
 

@@ -32,5 +32,7 @@
 	$package->action($test, "connect2");
 	echo "<br /><br />";
 	$package->action($test, "connect3");
+	echo "<br /><br />";
+	$package->action($test, "connect4");
 
 ?>
