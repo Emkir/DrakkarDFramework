@@ -2,19 +2,18 @@
 
 	namespace Test;
 
-	use Package;
-
 	class Test extends Test2
 	{
 		private $nom = "grelet";
 		public $prenom = "romain";
 		public $ville = "Bondy";
 		protected $age = "16";
+		public static $_coco = "Babaorum";
 
 		protected static $package = array (
-			"connect" => array ("test1", "test2", "test3"),
-			"connect2" => array ("test4", "connect", "lolilol"),
-			"connect3" => array ("test1(!KIKOU)", "test2", "test3")
+			"connect" => array ("test1", "test2", "test1(%lol)"),
+			"connect2" => array ("test1(%test.prenom)", "connect", "test1(%test.age)"),
+			"connect3" => array ("test1(%Test\Test::%_coco)", "test1(cocorico)", "test1(!KIKOU)")
 			);
 		//doit se trouver dans la classe mère (base)
 		public function getPackage ()
@@ -79,7 +78,6 @@
 	}
 
 	var_dump($change);*/
-	$lol = "kikou les amis";
 	
 	
 ?>
