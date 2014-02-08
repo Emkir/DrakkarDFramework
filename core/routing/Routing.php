@@ -33,11 +33,26 @@ class Routing {
                    if (!file_exists('..'.$project_route)){
                        throw new \Exception("Unknown routing file");
                    }
+                   self::getAction('..'.$project_route);
                    break;
                }
 
            }
 
+    }
+
+    public function getAction($routing){
+        $project_routes = Spyc::YAMLLoad($routing);
+        foreach ($project_routes as $route){
+            if ($route['pattern'] == $this->path){
+                $controller=$route['controller']."Controller";
+                $action = $route['action']."Action";
+                $instCont= new $controller;
+                $instCont->$action;
+                break;
+            }
+        }
+        var_dump($project_routes);
     }
 
     private function cleanEmptyInArray($array){

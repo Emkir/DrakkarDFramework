@@ -1,14 +1,19 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: SUPINTERNET
- * Date: 08/02/14
- * Time: 16:38
- */
-
 namespace DrakkarD\Autoload;
 
 
 class Autoload {
 
+    public static function autoload ($className)
+    {
+        echo "$className<br />";
+
+        $realClassName = explode('\\', $className);
+
+        if (array_key_exists(end($realClassName), self::$_coreClass))
+        {
+            include_once(self::$_coreClass[end($realClassName)]);
+
+        }
+    }
 } 
