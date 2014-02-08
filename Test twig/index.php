@@ -38,13 +38,16 @@
 	$package = Package\Package::getInstance();
 
 
-    echo $twig->render("iguane.html", array(
-		"moteur_name" => "twig"
-	));
+    
 
-	/*$package->action($test, "connect2");
+	$banane = "anchois";
 	echo "<br /><br />";
 	
-	$package->action($test, "connect3");*/
+	$package->action($test, "connect3");
+
+	echo $twig->render("iguane.html", array(
+		"moteur_name" => $package->action($test, "connect2"),
+		"test" => $banane
+	));
 
 ?>
