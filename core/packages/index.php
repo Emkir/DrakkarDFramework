@@ -28,6 +28,8 @@
 	$package = Drakkard\Package\Package::getInstance();
 
 	$package->action($test, "connect");
+	
+	$nom = $array[0];
 	echo "<br /><br />";
 	$package->action($test, "connect2");
 	echo "<br /><br />";
@@ -36,3 +38,9 @@
 	$package->action($test, "connect4");
 
 ?>
+
+html
+
+	<div>
+		{{test.nom}}
+	</div>
