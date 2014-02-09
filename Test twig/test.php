@@ -28,32 +28,32 @@
 			if ($optionel != null)
 				$this->nom = $optionel;
 
-			echo $this->nom;
+			return $this->nom;
 		}
 
 		public function test2 ()
 		{
-			echo " ".$this->prenom;
+			return " ".$this->prenom;
 		}
 
 		public function test3 ()
 		{
-			echo "<br />".$this->ville;
+			return "<br />".$this->ville;
 		}
 
 		public function test4 ()
 		{
-			echo "<br />".$this->age;
+			return "<br />".$this->age;
 		}
 
 		public function connect ()
 		{
-			echo " c'est l'age trop ";
+			return " c'est l'age trop ";
 		}
 
 		public function lolilol ()
 		{
-			echo "trop lolilol";
+			return "trop lolilol";
 		}
 
 		public function getAge ()
