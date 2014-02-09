@@ -1,5 +1,5 @@
 <?php
-	include_once('package.php');
+	include_once('Package.php');
 
 	class DrF
 	{
