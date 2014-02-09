@@ -11,7 +11,7 @@ class Routing {
 
     public function __construct(){
         $routing = '../core/config/routing.yml';
-        if (!file_exists($routing)){
+        if (!is_readable($routing)){
             throw new \Exception("Unknown routing file");
         }
         $this->config_routes = Spyc::YAMLLoad($routing);
@@ -20,17 +20,29 @@ class Routing {
             $this->params = array();
         }
         else{
-            $this->path = "/".substr($_SERVER['QUERY_STRING'],5);
-            $this->params = self::cleanEmptyInArray(explode('/', $_SERVER['QUERY_STRING']));
+            $this->path = $this->addBeginSlash($this->removeEndSlash(substr($_SERVER['QUERY_STRING'],5)));
+            $this->params = self::cleanEmptyInArray(explode('/', $this->path));
         }
-        var_dump($this->config_routes);
     }
 
     public function getRessource(){
            foreach ($this->config_routes as $route){
-               if (strpos($this->path,$route['pattern']) == 0){
+               $route['pattern'] = $this->addBeginSlash($this->removeEndSlash($route['pattern']));
+               $route_params = self::cleanEmptyInArray(explode('/', $route['pattern']));
+               $i=1;
+               $equal_path = true;
+               foreach($route_params as $param){
+                   if((isset($this->params[$i]) && $param != $this->params[$i]) || (empty($this->params[$i]))){
+                       $equal_path = false;
+                       break;
+                   }
+                   $i++;
+               }
+               if($equal_path == true){
+                   $this->path = $this->addBeginSlash($this->removeEndSlash(substr($this->path,strlen($route['pattern']))));
+                   $this->params = self::cleanEmptyInArray(explode('/', $this->path));
                    $project_route=$route['ressource'];
-                   if (!file_exists('..'.$project_route)){
+                   if (!is_readable('..'.$project_route)){
                        throw new \Exception("Unknown routing file");
                    }
                    self::getAction('..'.$project_route);
@@ -41,25 +53,22 @@ class Routing {
 
     public function getAction($routing){
         $project_routes = Spyc::YAMLLoad($routing);
-        $array_path = self::cleanEmptyInArray(explode('/', $this->path));
-        var_dump($array_path);
         foreach ($project_routes as $route){
-
+            $route['pattern'] = $this->addBeginSlash($this->removeEndSlash($route['pattern']));
             if(preg_match('/{.*}/',$route['pattern'])){
                 $array_route=self::cleanEmptyInArray(explode('/', $route['pattern']));
-                var_dump($array_route);
                 $i=1;
                 $equal_path = true;
                 foreach($array_route as $route_elem){
                     if(preg_match('/{.*}/',$route_elem)){
-                        if(isset($array_path[$i])){
-                            $params[substr($route_elem,1,(strlen($route_elem)-2))]=$array_path[$i];
+                        if(isset($this->params[$i])){
+                            $params[substr($route_elem,1,(strlen($route_elem)-2))]=$this->params[$i];
                         }
                         else{
                             $params[substr($route_elem,1,(strlen($route_elem)-2))]=null;
                         }
                     }
-                    elseif(isset($array_path[$i]) && $array_route[$i] != $array_path[$i]){
+                    elseif((isset($this->params[$i]) && $array_route[$i] != $this->params[$i]) || empty($this->params[$i])){
                         $equal_path = false;
                         break;
                     }
@@ -68,9 +77,14 @@ class Routing {
                 if($equal_path == true){
                     $controller=$route['controller']."Controller";
                     $action = $route['action']."Action";
-                    $reflection = new \ReflectionMethod($controller,$action);
                     $instCont= new $controller;
-                    $reflection->invokeArgs($instCont,$params);
+                    if (method_exists($instCont, $action) && is_callable(array($instCont, $action))){
+                        $reflection = new \ReflectionMethod($controller,$action);
+                        $reflection->invokeArgs($instCont,$params);
+                    }
+                    else{
+                        throw new \Exception("Unknown action");
+                    }
                     break;
                 }
             }
@@ -78,11 +92,15 @@ class Routing {
                 $controller=$route['controller']."Controller";
                 $action = $route['action']."Action";
                 $instCont= new $controller;
-                $instCont->$action();
+                if (method_exists($instCont, $action) && is_callable(array($instCont, $action))){
+                    $instCont->$action();
+                }
+                else{
+                    throw new \Exception("Unknown action");
+                }
                 break;
             }
         }
-        var_dump($project_routes);
     }
 
     private function cleanEmptyInArray($array){
@@ -92,5 +110,23 @@ class Routing {
             }
         }
         return $array;
+    }
+
+    private function addBeginSlash($element){
+        if(empty($element)){
+            $element = "/";
+        }
+        elseif($element[0]!="/"){
+            $element = "/".$element;
+        }
+        return $element;
+    }
+
+    private function removeEndSlash($element){
+        $len = strlen($element);
+        if($len != 0 && $element[$len-1] == "/"){
+            $element = substr($element,0,$len-1);
+        }
+        return $element;
     }
 } 
