@@ -1,4 +1,4 @@
 drakkard:
-    pattern: /
-    controller: pouet
+    pattern: /page/{index}/{index2}
+    controller: Pouet
     action: biscuit
