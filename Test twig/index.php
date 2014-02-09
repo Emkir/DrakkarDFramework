@@ -47,8 +47,8 @@
 	//$package->action($test, "connect2");
 
 	echo $twig->render("iguane.html", array(
-		"moteur_name" => $test,
-		"test" => $banane
+		"moteur_name" => $package->action($test, "connect2"),
+		"test" => $test
 	));
 
 ?>
