@@ -1,2 +1,4 @@
-<br> {{moteur_name}}
-<br> {{test}}
+{% autoescape false %}
+{{moteur_name}}
+<br><em> {{test.prenom}}</em>
+{% endautoescape %}

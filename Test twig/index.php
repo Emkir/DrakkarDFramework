@@ -31,7 +31,7 @@
 		}
 	}
 	
-	define("KIKOU", "rominouninou");
+	//define("KIKOU", "rominouninou");
 	spl_autoload_register(array('DrF', 'autoload'));
 	
 	$test = new Test\Test();
@@ -43,11 +43,12 @@
 	$banane = "anchois";
 	echo "<br /><br />";
 	
-	$package->action($test, "connect3");
+	//$package->action($test, "connect3");
+	//$package->action($test, "connect2");
 
 	echo $twig->render("iguane.html", array(
 		"moteur_name" => $package->action($test, "connect2"),
-		"test" => $banane
+		"test" => $test
 	));
 
 ?>
