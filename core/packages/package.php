@@ -32,6 +32,8 @@
 
 		public function action ($instance, $action)
 		{
+			$return = array();
+
 			//if the instance got the getPackage method and we can access her
 			//We call this function and get back the package settings of this instance
 			if (method_exists($instance, "getPackage") && is_callable(array($instance, "getPackage"), true, $to_call))
@@ -61,10 +63,12 @@
 
 
 						//execute the function if it is callable
-						$this->execute_func($instance, $function_name, $function_args);
+						$return[] = $this->execute_func($instance, $function_name, $function_args);
 					}
 				}
 			}
+
+			return $return;
 		}
 
 		protected function prepareArgs ($function)
@@ -179,6 +183,7 @@
 
 		protected function execute_func ($instance, $function_name, $function_args = null)
 		{
+			$return = null;
 		//if we can access to the target method we execute it
 			if (method_exists($instance, $function_name) && is_callable(array($instance, $function_name)))
 			{
@@ -187,22 +192,24 @@
 					if (count($function_args) > 1)
 					{
 						//call the method with an array of arguments
-						call_user_func_array(array($instance, $function_name), $function_args);
+						$return = call_user_func_array(array($instance, $function_name), $function_args);
 					}
 					
 					elseif (count($function_args) == 1)
 					{
 						//call the method with a single argument
-						call_user_func(array($instance, $function_name), $function_args[0]);
+						$return = call_user_func(array($instance, $function_name), $function_args[0]);
 					}
 					
 				}
 				else
 				{
 					//call the method without any argument
-					call_user_func(array($instance, $function_name));
+					$return = call_user_func(array($instance, $function_name));
 				}
 			}
+
+			return $return;
 		}
 
 		protected function updateGlobals ()
