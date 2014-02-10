@@ -1,6 +1,7 @@
 <?php
 
 namespace DrakkarD\Routing;
+use DrakkarD\DrakkarDException\DrakkarDException;
 use DrakkarD\Spyc\Spyc;
 
 class Routing {
@@ -12,7 +13,7 @@ class Routing {
     public function __construct(){
         $routing = '../core/config/routing.yml';
         if (!is_readable($routing)){
-            throw new \Exception("Unknown routing file");
+            throw new DrakkarDException("Unknown routing file");
         }
         $this->config_routes = Spyc::YAMLLoad($routing);
         if($_SERVER['QUERY_STRING'] == "path="){
@@ -43,7 +44,7 @@ class Routing {
                    $this->params = self::cleanEmptyInArray(explode('/', $this->path));
                    $project_route=$route['ressource'];
                    if (!is_readable('..'.$project_route)){
-                       throw new \Exception("Unknown routing file");
+                       throw new DrakkarDException("Unknown routing file");
                    }
                    self::getAction('..'.$project_route);
                    break;
@@ -83,7 +84,7 @@ class Routing {
                         $reflection->invokeArgs($instCont,$params);
                     }
                     else{
-                        throw new \Exception("Unknown action");
+                        throw new DrakkarDException("Unknown action");
                     }
                     break;
                 }
@@ -96,7 +97,7 @@ class Routing {
                     $instCont->$action();
                 }
                 else{
-                    throw new \Exception("Unknown action");
+                    throw new DrakkarDException("Unknown action");
                 }
                 break;
             }

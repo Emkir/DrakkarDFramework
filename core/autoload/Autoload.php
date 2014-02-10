@@ -1,5 +1,6 @@
 <?php
 namespace DrakkarD\Autoload;
+use DrakkarD\DrakkarDException\DrakkarDException;
 use DrakkarD\Spyc\Spyc;
 
 class Autoload {
@@ -15,7 +16,7 @@ class Autoload {
             $corepath = Spyc::YAMLLoad(self::BEGIN_COREPATH."config/classes.yml");
         }
         else{
-            throw new \Exception("Unknown config file for classes");
+            throw new DrakkarDException("Unknown config file for classes");
         }
 
         $realClassName = explode('\\', $className);
@@ -26,7 +27,7 @@ class Autoload {
                 require_once(self::BEGIN_COREPATH.$corepath[end($realClassName)]);
             }
             else{
-                throw new \Exception("The class file doesn't exists");
+                throw new DrakkarDException("The class file doesn't exists");
             }
         }
         elseif (is_readable(self::BEGIN_PROJECTPATH."config/classes.yml")){
@@ -37,12 +38,12 @@ class Autoload {
                     require_once(self::BEGIN_PROJECTPATH.$projectpath[end($realClassName)]);
                 }
                 else{
-                    throw new \Exception("The class file doesn't exists");
+                    throw new DrakkarDException("The class file doesn't exists");
                 }
             }
         }
         else{
-            throw new \Exception("Unknown class or config file");
+            throw new DrakkarDException("Unknown class or config file");
         }
     }
 } 
