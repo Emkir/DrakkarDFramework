@@ -4,10 +4,39 @@
 
 	class Package
 	{
+		/*
+		** get the current packages of the instance
+		** a package is under this form : array (
+		**	 'ActionName1' => array('functionToExecute1', 'functionToExecute2')
+		** );
+		** for each function we wanna call we can specify as many argument we want
+		*** string : ex : 'ActionName1' => 'functionToExecute(test)'
+		***	              'ActionName1' => 'functionToExecute("test")'
+		**
+		*** global variable : ex : 'ActionName1' => 'functionToExecute(%variableName)'
+		**
+		*** global constant : ex : 'ActionName1' => 'functionToExecute(!CONSTANT_NAME)'
+		**
+		*** instance attribut : ex : 'ActionName1' => 'functionToExecute(%instanceName.attributName)'
+		**
+		*** instance variable protected or private : will try to call the method getAttributName
+		**
+		*** instance static attribut : ex : 'ActionName1' => 'functionToExecute(%NamespaceName\InstanceName::%attributName)'
+		**
+		*** class constant : ex : 'ActionName1' => 'functionToExecute(%NamespaceName\InstanceName::!CONSTANT_NAME)'
+		*/
 		protected $packages;
 
+		/*
+		** get the instance of Package
+		** because Package class respect the Singleton pattern
+		*/
 		private static $_instance;
  		
+		/*
+		** get the $GLOBALS values
+		** it is automatically update by the updateGlobals method
+		*/
 		private static $_globals = array();
 
 		final private function __construct()
@@ -15,11 +44,17 @@
 			$this->updateGlobals();
 		}
 
+		/*
+		** disable multiple instance of this class
+		*/
 		final public function __clone()
 		{
 		    trigger_error("Le clonage n'est pas autorisé.", E_USER_ERROR);
 		}
 
+		/*
+		** static method to get the unique instance of Package
+		*/
 		final public static function getInstance()
 		{
 		    if(empty(self::$_instance))
@@ -30,6 +65,13 @@
 		    return self::$_instance;
 		}
 
+		/*
+		** action method execute some method of an instance
+		** action get 2 params
+		*** $instance is the instance we are going to treat with
+		*** $action is the key of the package we wanna execute
+		** this method will return an array with all the return of methods which had been called
+		*/
 		public function action ($instance, $action)
 		{
 			$return = array();
@@ -71,6 +113,10 @@
 			return $return;
 		}
 
+		/*
+		** prepareArgs will receive the function name with his argument as a string
+		** and will get their value
+		*/
 		protected function prepareArgs ($function)
 		{
 			$function_args = null;
@@ -79,42 +125,53 @@
 			$function_args = substr($function, strpos($function, "(") + 1);
 			$function_args = substr($function_args, 0, strrpos($function_args, ")"));
 			$function_args = explode(",", $function_args);
-			
+
 			foreach ($function_args as &$value)
 			{
-				if(strpos($value, " ") === 0)
-					$value = substr($value, 1);
-				if (strrpos($value, " ") === 0)
-					$value = substr($value, 0, strlen($value) - 2);
+				//trim strip whitespace from the beginning and end of a string
+				$value = trim($value);
 
+				//if the arg was pass like this : function('arg')
+				//we recup the arg like this : "'arg'" so we spit the "'"
+				//for a string
 				if (strpos($value, "'") === 0 && strrpos($value, "'") === strlen($value)-1)
 				{
 					$value = substr($value, 1, strlen($value)-2);
 				}
 
+				//same thing with '"arg"'
 				else if (strpos($value, '"') === 0 && strrpos($value, '"') === strlen($value)-1)
 				{
 					$value = substr($value, 1, strlen($value)-1);
 				}
 
+				// if there is a % at the beginning
+				// we want to find a variable for example a global variable or an instance
 				else if (strpos($value, '%') === 0)
 				{
+					//we strip the % at the beginning of the string
 					$value = substr($value, 1);
 
+					//we try to see if the variable we want is accessible in the global domain
+					// if it's the case we get is value
 					if (array_key_exists($value, self::$_globals))
 						$value = self::$_globals[$value];
 
+					//we try to see if we wanna access to an instance's attribut
 					elseif (strpos($value, '.') !== FALSE)
 					{
 						$table = explode('.', $value);
+						//we catch the instance of the argument
 						$arg_instance = self::$_globals[$table[0]];
-						//ca marche on peut donc bien récupérer l'instance
-						//et y executer les fonctions accessibles
-						//$this->execute_func($arg_instance, 'connect');
+						//we transform the instance into an array and stock it
 						$arg_instance_array = (array) $arg_instance;
 
+						//if the attribut is present and accessible in the instance
+						//we catch is value
 						if (array_key_exists($table[1], $arg_instance_array))
 							$value = $arg_instance_array[$table[1]];
+						// in the other case we try to call the method getAttributName
+						// to get the value of a protected or private attribut
 						else
 						{
 							$arg_function_name = "get".ucfirst($table[1]);
@@ -130,16 +187,20 @@
 						}
 					}
 
+					// if true we are searching a static attribut of an instance
 					elseif (strpos($value, '::%'))
 					{
-						//get in table an array as : array (Namespace\ClassName, StaticAttributeName);
+						// get in table an array as : array (Namespace\ClassName, StaticAttributeName);
 						$table = explode('::%', $value);
 						
+						// we test if the property exist in the class
 						if (property_exists($table[0], $table[1]))
 						{
+							// the ReflectionClass let us get an array of the static properties
 							$searchStaticAttribute = new \ReflectionClass($table[0]);
 							$listAttribute = $searchStaticAttribute->getStaticProperties();
 							
+							// if the attribut is here we catch the value
 							if (array_key_exists($table[1], $listAttribute))
 								$value = $listAttribute[$table[1]];
 							else
@@ -150,13 +211,17 @@
 							throw new \Exception("static attribute ".$table[1]." doesn't exist in class ".$table[0]);
 					}
 
+					// if true we are searching a static attribut of an instance
 					elseif (strpos($value, '::!'))
 					{
+						// table is form like this : (NamespaceName\ClassName, CONSTANT_NAME)
 						$table = explode('::!', $value);
 
+						// the ReflectionClass let us get an array of the constant properties of a class
 						$searchStaticAttribute = new \ReflectionClass($table[0]);
 						$listConstant = $searchStaticAttribute->getConstants();
 
+						// if the constant we're looking for is in the array we catch is value 
 						if (array_key_exists($table[1], $listConstant))
 							$value = $listConstant[$table[1]];
 						else
@@ -164,10 +229,13 @@
 					}
 				}
 
+				// if true : we're looking for a constant in the global domain
 				elseif (strpos($value, '!') === 0)
 				{
 					$value = substr($value, 1);
 
+					// we test if the constant exist in the global domain
+					// if true we catch the value with the contant() function 
 					if (defined($value))
 					{
 						$value = constant($value);
@@ -181,6 +249,9 @@
 			return $function_args;
 		}
 
+		/*
+		** will execute the methods that we wanna call for the package
+		*/
 		protected function execute_func ($instance, $function_name, $function_args = null)
 		{
 			$return = null;
@@ -212,6 +283,10 @@
 			return $return;
 		}
 
+		/*
+		** for each treatment for a function we wanna call for the package
+		** we call updateGlobals a little before to be able to access at properties we want 
+		*/
 		protected function updateGlobals ()
 		{
 			self::$_globals = $GLOBALS;
