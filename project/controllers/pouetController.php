@@ -11,7 +11,8 @@ class PouetController extends DrakkarDController {
 
         // compact way to create and save a model
         $tito = Person::create(array('name' => 'Tito', 'state' => 'VA'));
-        echo 'numero page:'.$numero;
+
+        echo $this->twig->render('test.html.twig', array('numero' => $numero));
     }
 
 } 
