@@ -15,19 +15,12 @@ class Autoload {
         if(is_readable(self::BEGIN_COREPATH."config/classes.yml")){
             $corepath = Spyc::YAMLLoad(self::BEGIN_COREPATH."config/classes.yml");
         }
-        else{
-            throw new DrakkarDException("Unknown config file for classes");
-        }
 
         $realClassName = explode('\\', $className);
-
         if (array_key_exists(end($realClassName), $corepath))
         {
             if(is_readable(self::BEGIN_COREPATH.$corepath[end($realClassName)])){
                 require_once(self::BEGIN_COREPATH.$corepath[end($realClassName)]);
-            }
-            else{
-                throw new DrakkarDException("The class file doesn't exists");
             }
         }
         elseif (is_readable(self::BEGIN_PROJECTPATH."config/classes.yml")){
@@ -37,13 +30,11 @@ class Autoload {
                 if(is_readable(self::BEGIN_PROJECTPATH.$projectpath[end($realClassName)])){
                     require_once(self::BEGIN_PROJECTPATH.$projectpath[end($realClassName)]);
                 }
-                else{
-                    throw new DrakkarDException("The class file doesn't exists");
-                }
             }
         }
-        else{
-            throw new DrakkarDException("Unknown class or config file");
-        }
     }
-} 
+
+    public static function autoloadException ($className){
+        throw new DrakkarDException("Fail to load: ".$className);
+    }
+}

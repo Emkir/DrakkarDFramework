@@ -4,21 +4,25 @@ if (!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 50300)
 
 define('PHP_ACTIVERECORD_VERSION_ID','1.0');
 
-require 'lib/Singleton.php';
-require 'lib/Config.php';
-require 'lib/Utils.php';
-require 'lib/DateTime.php';
-require 'lib/Model.php';
-require 'lib/Table.php';
-require 'lib/ConnectionManager.php';
-require 'lib/Connection.php';
-require 'lib/SQLBuilder.php';
-require 'lib/Reflections.php';
-require 'lib/Inflector.php';
-require 'lib/CallBack.php';
-require 'lib/Exceptions.php';
+require './../core/php-activerecord/lib/Singleton.php';
+require './../core/php-activerecord/lib/Config.php';
+require './../core/php-activerecord/lib/Utils.php';
+require './../core/php-activerecord/lib/DateTime.php';
+require './../core/php-activerecord/lib/Model.php';
+require './../core/php-activerecord/lib/Table.php';
+require './../core/php-activerecord/lib/ConnectionManager.php';
+require './../core/php-activerecord/lib/Connection.php';
+require './../core/php-activerecord/lib/SQLBuilder.php';
+require './../core/php-activerecord/lib/Reflections.php';
+require './../core/php-activerecord/lib/Inflector.php';
+require './../core/php-activerecord/lib/CallBack.php';
+require './../core/php-activerecord/lib/Exceptions.php';
 
-spl_autoload_register('activerecord_autoload');
+ActiveRecord\Config::initialize(function($cfg)
+{
+    $cfg->set_model_directory('./../project/models');
+    $cfg->set_connections(array('development' => 'mysql://root:@localhost/orders_test'));
+});
 
 function activerecord_autoload($class_name)
 {
