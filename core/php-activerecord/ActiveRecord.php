@@ -21,7 +21,7 @@ require './../core/php-activerecord/lib/Exceptions.php';
 ActiveRecord\Config::initialize(function($cfg)
 {
     $cfg->set_model_directory('./../project/models');
-    $cfg->set_connections(array('development' => 'mysql://root:@localhost/orders_test'));
+    $cfg->set_connections(array('development' => 'mysql://root:@localhost/drakkard'));
 });
 
 function activerecord_autoload($class_name)

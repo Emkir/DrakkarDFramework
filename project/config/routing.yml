@@ -1,4 +1,9 @@
-drakkard:
-    pattern: /page/{numero}
-    controller: Pouet
-    action: biscuit
+index:
+    pattern: /
+    controller: Index
+    action: index
+
+article:
+    pattern: /article/{id}
+    controller: Article
+    action: getArticle

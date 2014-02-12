@@ -1,1 +1,3 @@
-PouetController : controllers/pouetController.php
+IndexController : controllers/indexController.php
+ArticleController : controllers/ArticleController.php
+UserController : controllers/UserController.php

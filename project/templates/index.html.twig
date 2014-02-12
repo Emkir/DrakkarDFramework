@@ -1,0 +1,8 @@
+{% include 'header.html' %}
+
+{% for article in articles %}
+    <li><h2><a href="./article/{{ article.id }}">{{ article.titre }}</a></h2></li>
+    <li>{{ article.contenu }}</li>
+{% endfor %}
+
+{% include 'footer.html' %}
